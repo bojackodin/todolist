@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"net/http"
 	"time"
 )
@@ -14,6 +15,8 @@ func (app *application) run() error {
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
+
+	slog.Info("msg", "starting server addr", srv.Addr)
 
 	return srv.ListenAndServe()
 }

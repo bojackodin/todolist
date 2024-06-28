@@ -2,12 +2,15 @@ package main
 
 import (
 	"flag"
-	"log"
 	"log/slog"
+	"os"
 )
+
+const version = "1.0.0"
 
 type config struct {
 	port int
+	env  string
 }
 
 type application struct {
@@ -18,6 +21,7 @@ func main() {
 	var cfg config
 
 	flag.IntVar(&cfg.port, "port", 8080, "API server port")
+	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
 
 	flag.Parse()
 
@@ -25,10 +29,9 @@ func main() {
 		config: cfg,
 	}
 
-	slog.Info("starting server")
-
 	err := app.run()
 	if err != nil {
-		log.Fatal(err)
+		slog.Error("server run", err)
+		os.Exit(1)
 	}
 }
